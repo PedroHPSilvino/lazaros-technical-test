@@ -30,25 +30,25 @@ public class UserServiceImpl implements UserService {
         Set<ProfileEntity> profiles = getProfilesByIds(request.profileIds());
 
         UserEntity user = UserEntity.builder()
-            .name(request.name())
-            .profiles(profiles)
-            .build();
+                .name(request.name())
+                .profiles(profiles)
+                .build();
 
         return userMapper.toResponse(userRepository.save(user));
     }
 
     @Override
     public List<UserResponse> findAll() {
-        return userRepository.findAllBy()
-            .stream()
-            .map(userMapper::toResponse)
-            .toList();
+        return userRepository.findAllByOrderByIdAsc()
+                .stream()
+                .map(userMapper::toResponse)
+                .toList();
     }
 
     @Override
     public UserResponse findById(Long id) {
         UserEntity user = userRepository.findWithProfilesById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         return userMapper.toResponse(user);
     }
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse update(Long id, UpdateUserRequest request) {
         UserEntity user = userRepository.findWithProfilesById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         Set<ProfileEntity> profiles = getProfilesByIds(request.profileIds());
 

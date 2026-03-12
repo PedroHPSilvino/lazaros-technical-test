@@ -23,24 +23,24 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileResponse create(CreateProfileRequest request) {
         ProfileEntity profile = ProfileEntity.builder()
-            .description(request.description())
-            .build();
+                .description(request.description())
+                .build();
 
         return profileMapper.toResponse(profileRepository.save(profile));
     }
 
     @Override
     public List<ProfileResponse> findAll() {
-        return profileRepository.findAll()
-            .stream()
-            .map(profileMapper::toResponse)
-            .toList();
+        return profileRepository.findAllByOrderByIdAsc()
+                .stream()
+                .map(profileMapper::toResponse)
+                .toList();
     }
 
     @Override
     public ProfileResponse findById(Long id) {
         ProfileEntity profile = profileRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Profile not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found with id: " + id));
 
         return profileMapper.toResponse(profile);
     }
@@ -48,7 +48,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileResponse update(Long id, UpdateProfileRequest request) {
         ProfileEntity profile = profileRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Profile not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found with id: " + id));
 
         profile.setDescription(request.description());
 

@@ -60,7 +60,7 @@ class ProfileServiceImplTest {
             .build();
         ProfileResponse response = new ProfileResponse(1L, "Administrator");
 
-        when(profileRepository.findAll()).thenReturn(List.of(profile));
+        when(profileRepository.findAllByOrderByIdAsc()).thenReturn(List.of(profile));
         when(profileMapper.toResponse(profile)).thenReturn(response);
 
         List<ProfileResponse> result = profileService.findAll();

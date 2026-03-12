@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @EntityGraph(attributePaths = "profiles")
-    List<UserEntity> findAllBy();
+    List<UserEntity> findAllByOrderByIdAsc();
 
     @EntityGraph(attributePaths = "profiles")
     Optional<UserEntity> findWithProfilesById(Long id);

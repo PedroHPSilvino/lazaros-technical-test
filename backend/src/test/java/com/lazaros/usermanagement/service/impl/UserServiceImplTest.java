@@ -101,7 +101,7 @@ class UserServiceImplTest {
             List.of(new ProfileResponse(1L, "Administrator"))
         );
 
-        when(userRepository.findAllBy()).thenReturn(List.of(user));
+        when(userRepository.findAllByOrderByIdAsc()).thenReturn(List.of(user));
         when(userMapper.toResponse(user)).thenReturn(response);
 
         List<UserResponse> result = userService.findAll();
