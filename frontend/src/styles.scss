@@ -1,1 +1,89 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global layout */
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: #f5f5f5;
+}
+
+main {
+  padding: 32px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Snackbar styling */
+.mat-mdc-snack-bar-container {
+  background-color: #323232 !important;
+  color: white;
+  border-radius: 8px;
+}
+
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  background-color: #323232 !important;
+}
+
+.mat-mdc-snack-bar-container .mdc-button {
+  color: #ffcc00;
+}
+
+mat-card {
+  padding: 24px;
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-mdc-row:hover {
+  background: #f0f0f0;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* Form layout improvements */
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 600px;
+}
+
+/* Material select overlay fix */
+.cdk-overlay-container .mat-mdc-select-panel {
+  background-color: #ffffff !important;
+  color: #1f1f1f !important;
+  opacity: 1 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18) !important;
+}
+
+.cdk-overlay-container .mat-mdc-option {
+  background-color: #ffffff !important;
+  color: #1f1f1f !important;
+}
+
+.cdk-overlay-container .mat-mdc-option:hover,
+.cdk-overlay-container .mat-mdc-option.mdc-list-item--selected,
+.cdk-overlay-container .mat-mdc-option.mat-mdc-option-active {
+  background-color: #f3f4f6 !important;
+}
+
+.cdk-overlay-container .mat-mdc-select-panel .mdc-list {
+  background-color: #ffffff !important;
+}
+
+/* Optional: make the form field itself cleaner */
+mat-form-field {
+  width: 100%;
+}

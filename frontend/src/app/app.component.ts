@@ -14,14 +14,16 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatButtonModule,
   ],
   template: `
-    <mat-toolbar>
+    <mat-toolbar color="primary" class="navbar">
       <span>User Management</span>
-      <span style="flex: 1 1 auto;"></span>
+
+      <span class="spacer"></span>
+
       <a mat-button routerLink="/users" routerLinkActive="active">Users</a>
       <a mat-button routerLink="/profiles" routerLinkActive="active">Profiles</a>
     </mat-toolbar>
 
-    <main style="padding: 24px;">
+    <main>
       <router-outlet></router-outlet>
     </main>
   `,

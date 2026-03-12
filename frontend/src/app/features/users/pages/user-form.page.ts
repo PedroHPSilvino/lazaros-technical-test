@@ -117,6 +117,10 @@ export class UserFormPage implements OnInit {
   }
 
   protected submit(): void {
+    if (this.loading()) {
+      return;
+    }
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
