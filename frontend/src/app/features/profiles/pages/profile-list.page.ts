@@ -7,6 +7,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotificationService } from '../../../core/services/notification.service';
 
 import { ProfileApiService } from '../services/profile-api.service';
 import { Profile } from '../../../shared/models/profile.model';
@@ -21,6 +23,7 @@ import { Profile } from '../../../shared/models/profile.model';
     MatCardModule,
     MatTableModule,
     MatDialogModule,
+    MatSnackBarModule,
   ],
   template: `
     <mat-card>
@@ -59,6 +62,7 @@ export class ProfileListPage implements OnInit {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialog = inject(MatDialog);
+  private readonly notificationService = inject(NotificationService);
 
   protected readonly profiles = signal<Profile[]>([]);
   protected readonly displayedColumns = ['id', 'description', 'actions'];
@@ -93,8 +97,14 @@ export class ProfileListPage implements OnInit {
           .delete(profile.id)
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe({
-            next: () => this.loadProfiles(),
+            next: () => {
+              this.notificationService.showSuccess('Profile deleted successfully');
+              this.loadProfiles();
+            },
             error: (error) => {
+              this.notificationService.showError(
+                error?.error?.message ?? 'Failed to delete profile'
+              );
               console.error('Failed to delete profile', error);
             },
           });
@@ -110,6 +120,9 @@ export class ProfileListPage implements OnInit {
           this.profiles.set(profiles);
         },
         error: (error) => {
+          this.notificationService.showError(
+            error?.error?.message ?? 'Failed to load profiles'
+          );
           console.error('Failed to load profiles', error);
         },
       });

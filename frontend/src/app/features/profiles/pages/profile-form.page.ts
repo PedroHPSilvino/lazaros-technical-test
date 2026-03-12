@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotificationService } from '../../../core/services/notification.service';
 
 import { ProfileApiService } from '../services/profile-api.service';
 
@@ -21,6 +23,7 @@ import { ProfileApiService } from '../services/profile-api.service';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSnackBarModule,
   ],
   template: `
     <mat-card>
@@ -64,6 +67,7 @@ export class ProfileFormPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly notificationService = inject(NotificationService);
 
   protected readonly loading = signal(false);
   protected readonly isEditMode = signal(false);
@@ -106,13 +110,16 @@ export class ProfileFormPage implements OnInit {
       .subscribe({
         next: () => {
           this.loading.set(false);
+          this.notificationService.showSuccess(
+            this.isEditMode() ? 'Profile updated successfully' : 'Profile created successfully'
+          );
           void this.router.navigate(['/profiles']);
         },
         error: (error) => {
           this.loading.set(false);
-          this.errorMessage.set(
-            error?.error?.message ?? 'Failed to save profile'
-          );
+          const message = error?.error?.message ?? 'Failed to save profile';
+          this.errorMessage.set(message);
+          this.notificationService.showError(message);
           console.error('Failed to save profile', error);
         },
       });
@@ -134,9 +141,9 @@ export class ProfileFormPage implements OnInit {
         },
         error: (error) => {
           this.loading.set(false);
-          this.errorMessage.set(
-            error?.error?.message ?? 'Failed to load profile'
-          );
+          const message = error?.error?.message ?? 'Failed to load profile';
+          this.errorMessage.set(message);
+          this.notificationService.showError(message);
           console.error('Failed to load profile', error);
         },
       });

@@ -8,6 +8,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotificationService } from '../../../core/services/notification.service';
 
 import { ProfileApiService } from '../../profiles/services/profile-api.service';
 import { UserApiService } from '../services/user-api.service';
@@ -25,6 +27,7 @@ import { Profile } from '../../../shared/models/profile.model';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatSnackBarModule,
   ],
   template: `
     <mat-card>
@@ -82,6 +85,7 @@ export class UserFormPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly notificationService = inject(NotificationService);
 
   protected readonly loading = signal(false);
   protected readonly isEditMode = signal(false);
@@ -99,7 +103,7 @@ export class UserFormPage implements OnInit {
       Validators.required,
     ]),
   });
-  
+
   ngOnInit(): void {
     this.loadProfiles();
 
@@ -136,11 +140,16 @@ export class UserFormPage implements OnInit {
       .subscribe({
         next: () => {
           this.loading.set(false);
+          this.notificationService.showSuccess(
+            this.isEditMode() ? 'User updated successfully' : 'User created successfully'
+          );
           void this.router.navigate(['/users']);
         },
         error: (error) => {
           this.loading.set(false);
-          this.errorMessage.set(error?.error?.message ?? 'Failed to save user');
+          const message = error?.error?.message ?? 'Failed to save user';
+          this.errorMessage.set(message);
+          this.notificationService.showError(message);
           console.error('Failed to save user', error);
         },
       });
@@ -155,7 +164,9 @@ export class UserFormPage implements OnInit {
           this.profiles.set(profiles);
         },
         error: (error) => {
-          this.errorMessage.set(error?.error?.message ?? 'Failed to load profiles');
+          const message = error?.error?.message ?? 'Failed to load profiles';
+          this.errorMessage.set(message);
+          this.notificationService.showError(message);
           console.error('Failed to load profiles', error);
         },
       });

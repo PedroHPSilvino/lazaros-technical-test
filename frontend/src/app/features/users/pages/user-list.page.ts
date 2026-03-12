@@ -7,6 +7,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotificationService } from '../../../core/services/notification.service';
 
 import { UserApiService } from '../services/user-api.service';
 import { User } from '../../../shared/models/user.model';
@@ -21,6 +23,7 @@ import { User } from '../../../shared/models/user.model';
     MatCardModule,
     MatTableModule,
     MatDialogModule,
+    MatSnackBarModule,
   ],
   template: `
     <mat-card>
@@ -66,6 +69,7 @@ export class UserListPage implements OnInit {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialog = inject(MatDialog);
+  private readonly notificationService = inject(NotificationService);
 
   protected readonly users = signal<User[]>([]);
   protected readonly displayedColumns = ['id', 'name', 'profiles', 'actions'];
@@ -100,8 +104,14 @@ export class UserListPage implements OnInit {
           .delete(user.id)
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe({
-            next: () => this.loadUsers(),
+            next: () => {
+              this.notificationService.showSuccess('User deleted successfully');
+              this.loadUsers();
+            },
             error: (error) => {
+              this.notificationService.showError(
+                error?.error?.message ?? 'Failed to delete user'
+              );
               console.error('Failed to delete user', error);
             },
           });
@@ -117,6 +127,9 @@ export class UserListPage implements OnInit {
           this.users.set(users);
         },
         error: (error) => {
+          this.notificationService.showError(
+            error?.error?.message ?? 'Failed to load users'
+          );
           console.error('Failed to load users', error);
         },
       });
