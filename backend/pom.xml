@@ -9,11 +9,11 @@
 		<version>3.5.11</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.lazarus</groupId>
+	<groupId>com.lazaros</groupId>
 	<artifactId>usermanagement</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>usermanagement</name>
-	<description>Lazarus Technical Test</description>
+	<description>Lazaros Technical Test</description>
 	<url />
 	<licenses>
 		<license />

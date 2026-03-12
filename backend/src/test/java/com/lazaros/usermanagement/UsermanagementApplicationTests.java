@@ -1,4 +1,4 @@
-package com.lazarus.usermanagement;
+package com.lazaros.usermanagement;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
