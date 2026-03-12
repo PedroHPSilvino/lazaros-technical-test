@@ -16,11 +16,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleResourceNotFound(ResourceNotFoundException exception) {
         ApiErrorResponse response = new ApiErrorResponse(
-            Instant.now(),
-            HttpStatus.NOT_FOUND.value(),
-            exception.getMessage(),
-            List.of()
-        );
+                Instant.now(),
+                HttpStatus.NOT_FOUND.value(),
+                exception.getMessage(),
+                List.of());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
@@ -28,11 +27,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiErrorResponse> handleBusinessException(BusinessException exception) {
         ApiErrorResponse response = new ApiErrorResponse(
-            Instant.now(),
-            HttpStatus.BAD_REQUEST.value(),
-            exception.getMessage(),
-            List.of()
-        );
+                Instant.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage(),
+                List.of());
 
         return ResponseEntity.badRequest().body(response);
     }
@@ -40,17 +38,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleValidationException(MethodArgumentNotValidException exception) {
         List<String> errors = exception.getBindingResult()
-            .getFieldErrors()
-            .stream()
-            .map(this::buildValidationMessage)
-            .toList();
+                .getFieldErrors()
+                .stream()
+                .map(this::buildValidationMessage)
+                .toList();
 
         ApiErrorResponse response = new ApiErrorResponse(
-            Instant.now(),
-            HttpStatus.BAD_REQUEST.value(),
-            "Validation error",
-            errors
-        );
+                Instant.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Validation error",
+                errors);
 
         return ResponseEntity.badRequest().body(response);
     }
@@ -58,11 +55,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleGenericException(Exception exception) {
         ApiErrorResponse response = new ApiErrorResponse(
-            Instant.now(),
-            HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "Unexpected internal server error",
-            List.of(exception.getMessage())
-        );
+                Instant.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Unexpected internal server error",
+                List.of());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
